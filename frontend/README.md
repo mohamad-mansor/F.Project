@@ -1,15 +1,15 @@
 Aufgaben verteilung:
 
-(A)yhem:   1
+(A)yhem:   1 (Hero 02)
 
 
-(M)ohamad: 1.1 und 1.2
+(M)ohamad: 1.1 (Header) und 1.2 (Footer)
 
 
-(P)atrick: 2
+(P)atrick: 2 (Shop Page)
 
 
-(E)dgard: 4
+(E)dgard: 4 (Card 01)
 
 
-(S)abir: 9, 10
+(S)abir: 9 (Login-email) und 10 Reviews
