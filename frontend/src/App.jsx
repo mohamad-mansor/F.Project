@@ -7,13 +7,11 @@ function App() {
   return (
     <>
      <div className="flex flex-col min-h-screen">
-      {/* Header */}
       <Header />
 
       {/* AYHEM Hero Page   */}
-      <main className="flex-grow">{/* Your main content goes here */}</main>
+      <main className="flex-grow"></main>
 
-      {/* Footer - this will always stay at the bottom */}
       <Footer />
     </div>   
     </>
