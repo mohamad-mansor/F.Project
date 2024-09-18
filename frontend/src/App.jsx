@@ -1,9 +1,17 @@
+import { useState } from 'react'
+import Shopmen from './components/ShowMen.jsx';
+import ShopWomen from './components/ShowWomen.jsx';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import './App.css'
 
-const App = () => {
+function App() {
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
+     <ShopWomen />
+     <Shopmen />
+     <div className="flex flex-col min-h-screen">
       {/* Header */}
       <Header />
 
@@ -12,8 +20,9 @@ const App = () => {
 
       {/* Footer - this will always stay at the bottom */}
       <Footer />
-    </div>
-  );
-};
+    </div>   
+    </>
+  )
+}
 
 export default App;
