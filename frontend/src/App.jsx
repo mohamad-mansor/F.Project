@@ -6,14 +6,12 @@ function App() {
 
   return (
     <>
-     <div className="flex flex-col min-h-screen">
-      <Header />
-
-      {/* AYHEM Hero Page   */}
-      <main className="flex-grow"></main>
-
-      <Footer />
-    </div>   
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        {/* AYHEM Hero Page */}
+        <main className="flex-grow"></main>
+        <Footer />
+      </div>   
     </>
   )
 }
