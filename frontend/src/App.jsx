@@ -1,6 +1,6 @@
 import Footer from "./components/Footer";
-import Login from "./components/Login";
 import Header from "./components/Header";
+import Hero from "./components/hero.jsx";
 import './App.css'
 function App() {
 
@@ -8,11 +8,8 @@ function App() {
     <>
     <div>
         <Header />
-        {/* AYHEM Hero Page */}
-        
         <Hero />
         <Footer />
-        <Login />
       </div>   
     </>
   )
