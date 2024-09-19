@@ -6,139 +6,105 @@ import {
   FaTwitter,
   FaFacebookF,
 } from "react-icons/fa";
+import "./Footer.css";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-50 py-12 px-4 relative">
+    <footer className="footer">
       {/* Decorative element */}
-      <div
-        className="absolute inset-0 bg-opacity-10 bg-gray-100"
-        style={{ backgroundImage: "url(/path-to-pattern.png)" }}
-      ></div>
+      <div className="footer-bg-pattern"></div>
 
-      <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 z-10">
-        {" "}
-        {/* 4-column grid */}
+      <div className="footer-grid">
         {/* Shop Links */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Shop</h3>
-          <ul className="space-y-2 text-sm">
+        <div className="footer-section">
+          <h3 className="footer-heading">Shop</h3>
+          <ul className="footer-links">
             <li>
-              <a
-                href="#women"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <span className="mr-2">👗</span> Women's
+              <a href="#women" className="footer-link">
+                <span className="footer-icon">👗</span> Women's
               </a>
             </li>
             <li>
-              <a
-                href="#men"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <span className="mr-2">👔</span> Men's
+              <a href="#men" className="footer-link">
+                <span className="footer-icon">👔</span> Men's
               </a>
             </li>
             <li>
-              <a
-                href="#kids"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <span className="mr-2">🧸</span> Kids'
+              <a href="#kids" className="footer-link">
+                <span className="footer-icon">🧸</span> Kids'
               </a>
             </li>
             <li>
-              <a
-                href="#shoes"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <span className="mr-2">👟</span> Shoes
+              <a href="#shoes" className="footer-link">
+                <span className="footer-icon">👟</span> Shoes
               </a>
             </li>
             <li>
-              <a
-                href="#sale"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <span className="mr-2">💸</span> Sale
+              <a href="#sale" className="footer-link">
+                <span className="footer-icon">💸</span> Sale
               </a>
             </li>
           </ul>
         </div>
         {/* Help Links */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Help</h3>
-          <ul className="space-y-2 text-sm">
+        <div className="footer-section">
+          <h3 className="footer-heading">Help</h3>
+          <ul className="footer-links">
             <li>
-              <a
-                href="#contact"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <FaPhoneAlt className="mr-2" /> Contact Us
+              <a href="#contact" className="footer-link">
+                <FaPhoneAlt className="footer-icon" /> Contact Us
               </a>
             </li>
             <li>
-              <a
-                href="#faqs"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <FaEnvelope className="mr-2" /> FAQs
+              <a href="#faqs" className="footer-link">
+                <FaEnvelope className="footer-icon" /> FAQs
               </a>
             </li>
           </ul>
         </div>
         {/* About Links */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">About</h3>
-          <ul className="space-y-2 text-sm">
+        <div className="footer-section">
+          <h3 className="footer-heading">About</h3>
+          <ul className="footer-links">
             <li>
-              <a
-                href="#about"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
-                <FaMapMarkerAlt className="mr-2" /> About Us
+              <a href="#about" className="footer-link">
+                <FaMapMarkerAlt className="footer-icon" /> About Us
               </a>
             </li>
             <li>
-              <a
-                href="#careers"
-                className="text-gray-700 hover:text-black flex items-center"
-              >
+              <a href="#careers" className="footer-link">
                 🌟 Careers
               </a>
             </li>
           </ul>
 
-          <h3 className="text-lg font-semibold mt-6">Follow Us</h3>
-          <div className="flex space-x-4 text-gray-700">
-            <a href="#instagram" className="hover:text-black">
+          <h3 className="footer-heading">Follow Us</h3>
+          <div className="footer-social-links">
+            <a href="#instagram" className="footer-social-link">
               <FaInstagram size={20} />
             </a>
-            <a href="#twitter" className="hover:text-black">
+            <a href="#twitter" className="footer-social-link">
               <FaTwitter size={20} />
             </a>
-            <a href="#facebook" className="hover:text-black">
+            <a href="#facebook" className="footer-social-link">
               <FaFacebookF size={20} />
             </a>
           </div>
         </div>
         {/* Newsletter Section */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Newsletter</h3>
-          <p className="text-gray-600 text-sm">
+        <div className="footer-section">
+          <h3 className="footer-heading">Newsletter</h3>
+          <p className="footer-description">
             Subscribe to our newsletter to get updates on new products, offers,
             and events.
           </p>
-          <form className="flex flex-col space-y-4">
+          <form className="footer-form">
             <input
               type="email"
               placeholder="Email Address"
-              className="border border-gray-300 rounded-full py-2 px-4 text-sm w-full focus:outline-none focus:border-gray-500"
+              className="footer-input"
             />
-            <button
-              type="submit"
-              className="bg-black text-white py-2 px-6 rounded-full hover:bg-gray-800 text-sm w-full"
-            >
+            <button type="submit" className="footer-button">
               Subscribe
             </button>
           </form>
