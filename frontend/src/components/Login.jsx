@@ -1,6 +1,6 @@
-import "../components/login-email.css";
+import "../components/Login";
 
-function loginEmail() {
+function Login() {
   return (
     <div>
       {/* <header>
@@ -48,4 +48,4 @@ function handleSubmit(e) {
   alert("Login functionality will be added soon.");
 }
 
-export default loginEmail;
+export default Login;
