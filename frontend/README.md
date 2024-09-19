@@ -1,18 +1,24 @@
 Aufgaben verteilung:
 
-(A)yhem:   1 (Hero 02)
+(A)yhem: []  
 
 
-(M)ohamad: 1.1 (Header) und 1.2 (Footer)
+(M)ohamad:[] 
 
 
-(P)atrick:[x] 2 (Shop Page)
+(P)atrick:[] 
 
 
-(E)dgard: 4 (Card 01)
+(E)dgard: 4 noch offen
 
 
-(S)abir: 9 (Login-email) und 10 Reviews
+(S)abir: [] 10 Reviews
 
 
+erledigt:
 
+(Hero 02)
+1.1 (Header) und 1.2 (Footer)
+2 (Shop Page)
+4 (Card 01)
+9 (Login-email) 
