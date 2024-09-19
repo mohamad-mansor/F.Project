@@ -1,21 +1,10 @@
-import "../components/Login";
+import "../components/Login.css"
 
 function Login() {
   return (
-    <div>
-      {/* <header>
-        <nav>
-          <ul>
-            <li><a href="#">Shop</a></li>
-            <li><a href="#">Stories</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Search</a></li>
-          </ul>
-          
-        </nav>
-      </header> */}
+        <div className="flex-container">
+        <main>
 
-      <main>
         <div className="login-container">
           <h2>Welcome Back</h2>
           <form onSubmit={handleSubmit}>

@@ -9,26 +9,14 @@
     background-color: #f7f7f7;
   }
   
-  header {
-    background-color: #000;
-    padding: 20px;
-  }
-  
-  nav ul {
+  .flex-container {
     display: flex;
-    list-style: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
-  
-  nav ul li {
-    margin-right: 20px;
-  }
-  
-  nav ul li a {
-    color: white;
-    text-decoration: none;
-  }
-  
   .login-container {
+    justify-content: center;
     background-color: white;
     padding: 40px;
     margin: 100px auto;
@@ -85,17 +73,17 @@
     margin-top: -11px; /* Hebt den Link um 5px an */
   }
   
-  html, body {
+  /* html, body {
     height: 100%;
     width: 100%;
-  }
+  } */
   
   main {
     min-height: calc(100vh - 100px); /* Assuming the header height is 100px */
-    padding: 20px;
+    /* padding: 20px; */
     width: 300px;
     text-align: center;
-    margin: 222%;
+    /* margin: 222%; */
   }
   
   header {
