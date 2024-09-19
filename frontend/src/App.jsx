@@ -1,8 +1,9 @@
-import Header from "./components/";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
+import Header from "./components/Header";
 import './App.css'
 function App() {
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -17,3 +18,4 @@ function App() {
   )
 }
 export default App;
+
