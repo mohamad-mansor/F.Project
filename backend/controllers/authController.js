@@ -1,32 +1,28 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserModel } from "../models/user.model.js";  
+import { User } from "../models/user.model.js"; 
 
 // Einschreibungsfunktion
 export async function signup(req, res) {
   try {
     const { username, email, password } = req.body;
-
-    // Überprüft, ob der Benutzer bereits existiert
-    const existingUser = await UserModel.findOne({ email });
+    // Überprüft, ob User existiert
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "L'utilisateur existe déjà" });
+      return res.status(400).json({ message: "User exists already" });
     }
-
-    // Passwort hashen
+    // Hash vom Passwort
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Neuen Benutzer erstellen
-    const newUser = new UserModel({
+    // Userserstellung
+    const newUser = new User({
       username,
       email,
       password: hashedPassword,
     });
-
     await newUser.save();
-    res.status(201).json({ message: "Inscription réussie", user: newUser });
+    res.status(201).json({ message: "Successful registration", user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de l'inscription", error });
+    res.status(500).json({ message: "Registration error", error });
   }
 }
 
@@ -34,35 +30,35 @@ export async function signup(req, res) {
 export async function signin(req, res) {
   try {
     const { email, password } = req.body;
-
-    // Überprüft, ob der Benutzer existiert
-    const user = await UserModel.findOne({ email });
+    // Überprüft, ob User existiert
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Utilisateur non trouvé" });
+      return res.status(400).json({ message: "User not found" });
     }
-
-    // Passwortvalidierung
+    // Passwort Überprüfung
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Mot de passe incorrect" });
+      return res.status(400).json({ message: "incorrect password" });
     }
-
-    // JWT Token erstellen
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.status(200).json({ message: "Connexion réussie", token });
+    // Token JWT erstellen
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+    res.status(200).json({ message: "Successful connection", token });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la connexion", error });
+    res.status(500).json({ message: "Connection error", error });
   }
 }
 
 // Abmeldungsfunktion
 export function signout(req, res) {
   try {
-    res.status(200).json({ message: "Déconnexion réussie" });
+    res.status(200).json({ message: "Successful disconnection" });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la déconnexion", error });
+    res.status(500).json({ message: "Disconnection error", error });
   }
 }
