@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import createError from "http-errors";  // Si vous utilisez `http-errors`
 import {
     mongoConnect,
     mongoDCListener,
@@ -14,22 +15,41 @@ app.use("/user", UserRouter);
 
 dotenv.config();
 
+const app = express();
+
+app.use(express.json());
+
 mongoDCListener();
 mongoErrorListener();
-await mongoConnect();
 
-app.all("*", (req, res, next) => {
-    next(createError.NotFound("This Page is not found"));
-  });
-  
-  app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-      code: err.status,
-      answer: err.message || "Servererror Contact Support",
+(async () => {
+  try {
+    await mongoConnect();
+    console.log("Connexion MongoDB réussie");
+
+    app.use("/api/auth", authRoutes);   // Routes d'authentification
+    app.use("/api/posts", postRoutes);  // Routes pour les posts
+
+    // Lancer le serveur uniquement après la connexion MongoDB
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Le serveur est lancé sur le port ${PORT}`);
     });
-  });
+  } catch (error) {
+    console.error("Erreur lors de la connexion à MongoDB : ", error);
+    process.exit(1);  // Quitter l'application si la connexion à MongoDB échoue
+  }
+})();
 
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server läuft auf Port ${PORT}`);
+// Middleware pour gérer les routes inexistantes
+app.all("*", (req, res, next) => {
+  next(createError(404, "Cette page est introuvable"));
+});
+
+// Middleware pour gérer les erreurs globales
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    code: err.status || 500,
+    message: err.message || "Erreur serveur, contactez le support",
   });
+});
