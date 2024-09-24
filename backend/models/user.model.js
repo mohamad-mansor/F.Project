@@ -1,22 +1,52 @@
-import mongoose from 'mongoose';
+import { Schema, model } from "mongoose";
+import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema({
+export const UserSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    minLength: 3,
+    maxLength: 16,
     unique: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+    trim: true,
+    lowercase: true,
   },
   password: {
     type: String,
-    required: true,
+    minLength: 8,
+    maxLength: 16,
+  },
+  email: {
+    type: String,
+    unique: true,
+    lowercase: true,
+  },
+  verified: Number,
+  verifylink: String,
+  tos: {
+    type: Number,
+    enum: [1],
   },
 });
 
-const User = mongoose.model('User', userSchema);
+// Unser Return-Objekt aufräumen
+UserSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  delete obj.__v;
+  return obj;
+};
 
-export default User;
+// Passwort wird mit dem gehasten passwort geprüft und verglichen, sind beide richtig gibt es true zurück.
+UserSchema.methods.authenticate = async function (plainPassword) {
+  return await bcrypt.compare(plainPassword, this.password);
+};
+
+//Hook: wird vorher ausgeführt und das passwort wird gehasht
+UserSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 12);
+  }
+  next();
+});
+
+export const User = model("User", UserSchema);
