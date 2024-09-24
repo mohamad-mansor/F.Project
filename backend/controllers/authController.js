@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";  // Assurez-vous que le modèle User est bien configuré
+import User from "../models/user.model.js";
 
 // Einschreibungsfunktion
 export async function signup(req, res) {
@@ -10,7 +10,7 @@ export async function signup(req, res) {
     // Überprüft, ob User existiert
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "L'utilisateur existe déjà" });
+      return res.status(400).json({ message: "User exists already" });
     }
 
     // Hash vom Passwort
@@ -25,9 +25,9 @@ export async function signup(req, res) {
 
     await newUser.save();
 
-    res.status(201).json({ message: "Inscription réussie", user: newUser });
+    res.status(201).json({ message: "Successful registration", user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de l'inscription", error });
+    res.status(500).json({ message: "Registration error", error });
   }
 }
 
@@ -39,13 +39,13 @@ export async function signin(req, res) {
     // Überprüft, ob User existiert
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Utilisateur non trouvé" });
+      return res.status(400).json({ message: "User not found" });
     }
 
     // Passwort Überprüfung
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Mot de passe incorrect" });
+      return res.status(400).json({ message: "incorrect password" });
     }
 
     // Token JWT erstellen
@@ -53,9 +53,9 @@ export async function signin(req, res) {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ message: "Connexion réussie", token });
+    res.status(200).json({ message: "Successful connection", token });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la connexion", error });
+    res.status(500).json({ message: "Connection error", error });
   }
 }
 
@@ -63,8 +63,8 @@ export async function signin(req, res) {
 export function signout(req, res) {
   try {
     
-    res.status(200).json({ message: "Déconnexion réussie" });
+    res.status(200).json({ message: "Successful disconnection" });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la déconnexion", error });
+    res.status(500).json({ message: "Disconnection error", error });
   }
 }
