@@ -11,6 +11,8 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+
 mongoDCListener();
 mongoErrorListener();
 
@@ -18,6 +20,9 @@ mongoErrorListener();
   try {
     await mongoConnect();
     console.log("Connexion MongoDB réussie");
+
+    app.use("/api/auth", authRoutes);   // Routes d'authentification
+    app.use("/api/posts", postRoutes);  // Routes pour les posts
 
     // Lancer le serveur uniquement après la connexion MongoDB
     const PORT = process.env.PORT || 3000;
