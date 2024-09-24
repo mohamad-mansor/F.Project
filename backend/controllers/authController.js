@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import { UserModel } from "../models/user.model.js";  
 
 // Einschreibungsfunktion
 export async function signup(req, res) {
@@ -8,7 +8,7 @@ export async function signup(req, res) {
     const { username, email, password } = req.body;
 
     // Überprüft, ob der Benutzer bereits existiert
-    const existingUser = await User.findOne({ email });
+    const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "L'utilisateur existe déjà" });
     }
@@ -17,7 +17,7 @@ export async function signup(req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Neuen Benutzer erstellen
-    const newUser = new User({
+    const newUser = new UserModel({
       username,
       email,
       password: hashedPassword,
@@ -36,7 +36,7 @@ export async function signin(req, res) {
     const { email, password } = req.body;
 
     // Überprüft, ob der Benutzer existiert
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Utilisateur non trouvé" });
     }
