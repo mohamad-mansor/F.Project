@@ -5,7 +5,12 @@ import {
     mongoDCListener,
     mongoErrorListener,
   } from "./db/connection.db.js";
+
+import { UserRouter } from "./router/UserRouter.js";
+
 const app = express();
+
+app.use("/user", UserRouter);
 
 dotenv.config();
 
