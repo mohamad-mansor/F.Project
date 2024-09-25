@@ -10,9 +10,11 @@ export const signupValidation = [
     .isEmail().withMessage('Bitte geben Sie eine gültige E-Mail-Adresse ein')
     .normalizeEmail(),
   
-  body('password')
-    .isLength({ min: 8 }).withMessage('Das Passwort muss mindestens 8 Zeichen lang sein')
+    body('password')
+    .isLength({ min: 8, max: 16 }) 
+    .withMessage('Das Passwort muss zwischen 8 und 32 Zeichen lang sein')
     .not().isEmpty().withMessage('Das Passwort ist erforderlich'),
+  
 ];
 
 export const signinValidation = [
