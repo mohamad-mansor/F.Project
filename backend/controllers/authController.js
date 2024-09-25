@@ -6,14 +6,11 @@ import { User } from "../models/user.model.js";
 export async function signup(req, res) {
   try {
     const { username, email, password } = req.body;
-    // Überprüft, ob User existiert
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User exists already" });
     }
-    // Hash vom Passwort
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Userserstellung
     const newUser = new User({
       username,
       email,
@@ -30,17 +27,14 @@ export async function signup(req, res) {
 export async function signin(req, res) {
   try {
     const { email, password } = req.body;
-    // Überprüft, ob User existiert
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    // Passwort Überprüfung
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "incorrect password" });
     }
-    // Token JWT erstellen
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,

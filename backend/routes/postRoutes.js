@@ -5,7 +5,7 @@ import {
   updatePost,
 } from "../controllers/postController.js";
 const router = express.Router();
-router.post("/posts", createPost);
-router.delete("/posts/:postId", deletePost);
-router.patch("/posts/:postId", updatePost);
+router.post("/", createPost);
+router.delete("/:postId", deletePost);
+router.patch("/:postId", updatePost);
 export default router;
