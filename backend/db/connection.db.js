@@ -13,10 +13,11 @@ export async function mongoConnect() {
     });
     console.log("Connection to MongoDB successful");
   } catch (error) {
-    console.log(error);
+    console.log("MongoDB connection error:", error); 
     process.exit(1);
   }
 }
+
 
 export function mongoErrorListener() {
   mongoose.connection.on("error", (err) => {

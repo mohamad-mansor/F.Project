@@ -19,9 +19,11 @@ export async function signup(req, res) {
     await newUser.save();
     res.status(201).json({ message: "Successful registration", user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Registration error", error });
+    console.error("Error during signup:", error); // Log the error to the console
+    res.status(500).json({ message: "Registration error", error: error.message });
   }
 }
+
 
 // Anmeldungsfunktion
 export async function signin(req, res) {

@@ -11,7 +11,7 @@ export const signupValidation = [
     .normalizeEmail(),
   
   body('password')
-    .isLength({ min: 8 }).withMessage('Das Passwort muss mindestens 8 Zeichen lang sein')
+    .isLength({ min: 8, max: 16 }).withMessage('Das Passwort muss mindestens 8 Zeichen lang sein')
     .not().isEmpty().withMessage('Das Passwort ist erforderlich'),
 ];
 
