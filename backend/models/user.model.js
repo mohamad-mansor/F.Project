@@ -13,7 +13,6 @@ export const UserSchema = new Schema({
   password: {
     type: String,
     minLength: 8,
-    maxLength: 16,
   },
   email: {
     type: String,
