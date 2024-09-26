@@ -60,3 +60,4 @@ export async function updatePost(req, res) {
     res.status(500).json({ message: "Error while updating the post", error });
   }
 }
+
