@@ -1,7 +1,7 @@
 import express from "express";
 import { createPost, deletePost, updatePost } from "../controllers/postController.js";
-import { authenticateToken } from "../middlewares/authmiddleware.js";
-import { checkRole } from "../middlewares/checkRole.js"; // Import the role-checking middleware
+import { authenticateToken } from "../middleware/authmiddleware.js";
+import { checkRole } from "../middleware/checkRole.js"; // Import the role-checking middleware
 
 const router = express.Router();
 

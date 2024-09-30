@@ -6,7 +6,7 @@ import csrf from "csurf";
 import { mongoConnect, mongoDCListener, mongoErrorListener } from "./db/connection.db.js";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
-import { authenticateToken } from "./middlewares/authmiddleware.js"; 
+import { authenticateToken } from "./middleware/authmiddleware.js"; 
 
 dotenv.config();
 
