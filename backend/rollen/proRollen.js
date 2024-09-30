@@ -1,5 +1,5 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
+import express from "express";
+import jwt from "jsonwebtoken";
 
 const app = express();
 app.use(express.json());
@@ -81,3 +81,8 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server läuft auf Port ${PORT}`);
 });
+
+// app.listen(3000, '0.0.0.0', () => {
+//     console.log('Server läuft auf Port 3000');
+//   });
+  
