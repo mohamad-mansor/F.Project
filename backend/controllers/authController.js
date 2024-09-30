@@ -5,6 +5,9 @@ import { User } from "../models/user.model.js";
 // Einschreibungsfunktion
 export async function signup(req, res) {
   try {
+            // testen
+    console.log("Anmeldedaten:", req.body);
+
     const { username, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -19,10 +22,16 @@ export async function signup(req, res) {
     await newUser.save();
     res.status(201).json({ message: "Successful registration", user: newUser });
   } catch (error) {
-    console.error("Error during signup:", error); // Log the error to the console
+    console.error("Error during signup:", error); 
     res.status(500).json({ message: "Registration error", error: error.message });
   }
 }
+// testen
+const password = "12345678"; // Das Klartextpasswort
+const hashedFromDB = "$2b$12$Gj7x4JGz5r/T8k2N3ASk6eJlA0Ufl7s2w5tJmpo30kbVs5/krKO9q"; // Das gehashte Passwort aus der DB
+
+const isMatch = await bcrypt.compare(password, hashedFromDB);
+console.log("Passwortvergleich:", isMatch); // Sollte true ausgeben
 
 
 // Anmeldungsfunktion
