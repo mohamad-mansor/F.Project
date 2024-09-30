@@ -43,18 +43,6 @@ const authorizeAdmin = (req, res, next) => {
     }
 };
 
-// Anmelden und Token erstellen
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password);
-
-    if (user) {
-        const accessToken = jwt.sign({ username: user.username, role: user.role }, SECRET_KEY);
-        res.json({ accessToken });
-    } else {
-        res.send('Benutzername oder Passwort ist falsch');
-    }
-});
 
 // Produktliste (zugänglich für user und admin)
 app.get('/products', authenticateJWT, (req, res) => {
