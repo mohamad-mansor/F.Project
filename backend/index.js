@@ -53,24 +53,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-Middleware for JWT Authentication:
-This middleware ensures that only authenticated users can access certain routes by verifying the JWT.
 
-javascript
-Copy code
-import jwt from 'jsonwebtoken';
-
-export const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (!token) {
-    return res.sendStatus(401); // No token provided
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.sendStatus(403); // Invalid token
-    }
-    req.user = user;
-    next();
-  });
-};
