@@ -1,36 +1,47 @@
 import express from "express";
 import dotenv from "dotenv";
 import createError from "http-errors";
-import {
-  mongoConnect,
-  mongoDCListener,
-  mongoErrorListener,
-} from "./db/connection.db.js";
+import cookieParser from "cookie-parser";
+import csrf from "csurf";
+import { mongoConnect, mongoDCListener, mongoErrorListener } from "./db/connection.db.js";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
-import { authenticateToken } from "./middleware/authmiddleware.js"; 
+import { authenticateToken } from "./middlewares/authmiddleware.js"; 
 
 dotenv.config();
 
 const app = express();
 
+// Middleware for handling cookies
+app.use(cookieParser());
+
+// Middleware for parsing JSON requests
 app.use(express.json());
 
-// MongoDB Listener
+// CSRF protection middleware
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
+
+// Route to get CSRF token
+app.get('/csrf-token', (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
+
+// MongoDB listeners and connection
 mongoDCListener();
 mongoErrorListener();
-await mongoConnect();
+mongoConnect();
 
-
+// Authentication and post routes
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", authenticateToken, postRoutes); 
+app.use("/api/posts", authenticateToken, postRoutes);
 
-// 404 Fehlerbehandlung
+// 404 Error handling
 app.all("*", (req, res, next) => {
   next(createError(404, "Page not found"));
 });
 
-// Fehlerbehandlung
+// Error handling middleware
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     code: err.status || 500,
@@ -38,8 +49,28 @@ app.use((err, req, res, next) => {
   });
 });
 
-
 const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`server on the Port ${PORT}`);
-    });
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+Middleware for JWT Authentication:
+This middleware ensures that only authenticated users can access certain routes by verifying the JWT.
+
+javascript
+Copy code
+import jwt from 'jsonwebtoken';
+
+export const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) {
+    return res.sendStatus(401); // No token provided
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); // Invalid token
+    }
+    req.user = user;
+    next();
+  });
+};
