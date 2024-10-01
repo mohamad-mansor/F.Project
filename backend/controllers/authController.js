@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserModel } from "../models/user.model.js"; 
+import { User } from "../models/user.model.js"; 
 
 // Einschreibungsfunktion
 export async function signup(req, res) {
@@ -8,24 +8,41 @@ export async function signup(req, res) {
     const { username, email, password } = req.body;
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User exists already" });
+      return res.status(400).json({ message: "User already exists" });
     }
-    const newUser = new UserModel({
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
       username,
       email,
-      password
+      password: hashedPassword,
     });
     await newUser.save();
-    res.status(201).json({ message: "Successful registration", user: newUser });
+
+    const token = generateToken(newUser);
+    const refreshToken = generateRefreshToken(newUser);
+
+    // Set refresh token in an HTTP-only cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,  // Prevent JavaScript access to the cookie
+      secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
+      sameSite: 'Strict',  // Only send the cookie for same-site requests
+    });
+
+
+    res.status(201).json({
+      message: "User registered successfully",
+      token,
+      refreshToken,
+      user: newUser,
+    });
   } catch (error) {
-    console.error("Error during signup:", error); 
+    console.error("Error during signup:", error); // Log the error to the console
     res.status(500).json({ message: "Registration error", error: error.message });
   }
 }
 
 
-
-// Anmeldungsfunktion
+// User signin
 export async function signin(req, res) {
   try {
     const { email, password } = req.body;
@@ -37,17 +54,13 @@ export async function signin(req, res) {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    
-    //testen
-    console.log("Benutzer gefunden:", user);
-
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     //testen
     console.log("Passwort korrekt?", isPasswordValid);
 
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "incorrect password" });
+      return res.status(400).json({ message: "Incorrect password" });
     }
     const token = jwt.sign(
       { id: user._id, email: user.email },
@@ -56,26 +69,29 @@ export async function signin(req, res) {
         expiresIn: "1h",
       }
     );
-    
-    //testen
-    console.log("JWT Secret:", process.env.JWT_SECRET);
-
-
-    //testen
-    console.log("JWT-Token generiert:", token);
-
     res.status(200).json({ message: "Successful connection", token });
   } catch (error) {
-    res.status(500).json({ message: "Connection error", error });
+    res.status(500).json({ message: "Signin error", error: error.message });
   }
 }
 
-// Abmeldungsfunktion
-export function signout(req, res) {
+// Function to refresh JWT token using refresh token
+export async function refreshToken(req, res) {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
+
   try {
-    res.status(200).json({ message: "Successful disconnection" });
+    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid refresh token" });
+    }
+
+    const newToken = generateToken(user);
+    res.status(200).json({ token: newToken });
   } catch (error) {
-    res.status(500).json({ message: "Disconnection error", error });
+    res.status(401).json({ message: "Invalid or expired refresh token", error: error.message });
   }
 }
-

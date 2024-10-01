@@ -1,4 +1,4 @@
-import Post from "../models/post.models.js";
+import Post from "../models/post.model.js";
 
 // POST
 export async function createPost(req, res) {
@@ -60,3 +60,4 @@ export async function updatePost(req, res) {
     res.status(500).json({ message: "Error while updating the post", error });
   }
 }
+
