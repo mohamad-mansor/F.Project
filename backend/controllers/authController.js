@@ -2,24 +2,27 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { User } from '../models/user.model.js';
 
-// Secrets for JWT and refresh tokens
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
-const JWT_EXPIRES_IN = '15m';  // User token expires in 15 minutes
-const JWT_REFRESH_EXPIRES_IN = '7d';  // Refresh token expires in 7 days
+const JWT_EXPIRES_IN = '15m';
+const JWT_REFRESH_EXPIRES_IN = '7d';
 
-// Function to generate JWT with user role
+// Function to generate JWT
 function generateToken(user) {
   return jwt.sign(
-    { id: user._id, email: user.email, role: user.role }, // Include role in the token
-    JWT_SECRET,
+    { id: user._id, email: user.email, role: user.role }, 
+    JWT_SECRET, 
     { expiresIn: JWT_EXPIRES_IN }
   );
 }
 
 // Function to generate refresh token
 function generateRefreshToken(user) {
-  return jwt.sign({ id: user._id, email: user.email }, JWT_REFRESH_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN });
+  return jwt.sign(
+    { id: user._id, email: user.email }, 
+    JWT_REFRESH_SECRET, 
+    { expiresIn: JWT_REFRESH_EXPIRES_IN }
+  );
 }
 
 // User signup
@@ -32,7 +35,7 @@ export async function signup(req, res) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword, role: "user" });
     await newUser.save();
 
     const token = generateToken(newUser);
@@ -40,16 +43,14 @@ export async function signup(req, res) {
 
     // Set refresh token in an HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,  // Prevent JavaScript access to the cookie
-      secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
-      sameSite: 'Strict',  // Only send the cookie for same-site requests
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
     });
-
 
     res.status(201).json({
       message: "User registered successfully",
       token,
-      refreshToken,
       user: newUser,
     });
   } catch (error) {
@@ -76,15 +77,14 @@ export async function signin(req, res) {
 
     // Set refresh token in an HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,  // Prevent JavaScript access to the cookie
-      secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
-      sameSite: 'Strict',  // Only send the cookie for same-site requests
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
     });
 
     res.status(200).json({
       message: "User signed in successfully",
       token,
-      refreshToken,
       user,
     });
   } catch (error) {
@@ -92,9 +92,9 @@ export async function signin(req, res) {
   }
 }
 
-// Function to refresh JWT token using refresh token
+// Function to refresh JWT token
 export async function refreshToken(req, res) {
-  const { refreshToken } = req.body;
+  const { refreshToken } = req.cookies; // Ensure you're using cookies to get refresh token
   if (!refreshToken) {
     return res.status(401).json({ message: "No refresh token provided" });
   }
@@ -115,7 +115,6 @@ export async function refreshToken(req, res) {
 
 // User signout
 export function signout(req, res) {
-  // Invalidate refresh token logic can be added here if needed
+  res.clearCookie('refreshToken'); // Clear the refresh token cookie
   res.status(200).json({ message: "User signed out successfully" });
 }
-

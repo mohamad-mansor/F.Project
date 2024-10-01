@@ -5,8 +5,13 @@ import { checkRole } from "../middleware/checkRole.js"; // Import the role-check
 
 const router = express.Router();
 
-router.post("/", authenticateToken, createPost); // All authenticated users can create posts
-router.delete("/:postId", authenticateToken, checkRole(["admin"]), deletePost); // Only admins can delete posts
-router.patch("/:postId", authenticateToken, checkRole(["admin", "user"]), updatePost); // Admins and users can update posts
+// All authenticated users can create posts
+router.post("/", authenticateToken, createPost);
+
+// Only admins can delete posts
+router.delete("/:postId", authenticateToken, checkRole(["admin"]), deletePost);
+
+// Both admins and users can update posts
+router.patch("/:postId", authenticateToken, checkRole(["admin", "user"]), updatePost);
 
 export default router;
