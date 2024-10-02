@@ -12,8 +12,7 @@ export const UserSchema = new Schema({
   },
   password: {
     type: String,
-    minLength: 8,
-    maxLength: 16,
+    minLength: 8
   },
   email: {
     type: String,
@@ -54,7 +53,7 @@ UserSchema.methods.authenticate = async function (plainPassword) {
 // Pre-save hook: Hash the password before saving the user document
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 12);
+    this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
