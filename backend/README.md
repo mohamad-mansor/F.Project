@@ -6,7 +6,7 @@ user token
 rollen: user, admin, produkte
 
 
-model:   PATRICK
+model:   
 
 user.model/UserSchema
 hash für passwort
@@ -17,7 +17,7 @@ middlewares:
 jwt, security, mongodb/user /create.user.js
 
 
-controller:    EDGARD
+controller:    
 
 signup (registrierung)
 signin (login)
@@ -27,7 +27,7 @@ delete
 patch
 
 
-routes:   SABIR
+routes:  
 
 checkmail
 check signup

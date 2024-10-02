@@ -12,40 +12,50 @@ export const UserSchema = new Schema({
   },
   password: {
     type: String,
-    minLength: 8,
+    minLength: 8
   },
   email: {
     type: String,
     unique: true,
     lowercase: true,
   },
-  verified: Number,
-  verifylink: String,
+  role: {
+    type: String,
+    enum: ["user", "admin"], // Allowed roles
+    default: "user", // Default role is "user"
+  },
+  verified: {
+    type: Number,
+    default: 0, // 0 = not verified, 1 = verified
+  },
+  verifylink: {
+    type: String,
+  },
   tos: {
     type: Number,
-    enum: [1],
+    enum: [1], // Terms of Service acceptance
   },
 });
 
-// Unser Return-Objekt aufräumen
+// Method to remove sensitive fields when returning the user object
 UserSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  delete obj.password;
-  delete obj.__v;
+  delete obj.password; // Do not return password in the response
+  delete obj.__v;      // Do not return Mongoose version key
   return obj;
 };
 
-// Passwort wird mit dem gehasten passwort geprüft und verglichen, sind beide richtig gibt es true zurück.
+// Method to compare plain text password with hashed password in the database
 UserSchema.methods.authenticate = async function (plainPassword) {
   return await bcrypt.compare(plainPassword, this.password);
 };
 
-//Hook: wird vorher ausgeführt und das passwort wird gehasht
+// Pre-save hook: Hash the password before saving the user document
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 12);
+    this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
 
-export const User = model("User", UserSchema);
+export const UserModel = model("User", UserSchema);
