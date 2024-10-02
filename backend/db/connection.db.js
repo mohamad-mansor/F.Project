@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const mongoOptions = {
   dbName: "ampes",
-  useNewUrlParser: true,      // Better compatibility with new versions of MongoDB
-  useUnifiedTopology: true,   // Uses the modern MongoDB connection management engine
+  useNewUrlParser: true,  
+  useUnifiedTopology: true,   
 };
 
 export async function mongoConnect() {
@@ -13,7 +13,7 @@ export async function mongoConnect() {
     });
     console.log("Connection to MongoDB successful");
   } catch (error) {
-    console.log(error);
+    console.log("MongoDB connection error:", error); 
     process.exit(1);
   }
 }
@@ -27,10 +27,12 @@ export function mongoErrorListener() {
 export function mongoDCListener() {
   mongoose.connection.on("disconnected", () => {
     console.warn("Disconnected from MongoDB");
-    // If you want to attempt to reconnect automatically:
     setTimeout(() => {
       console.log("Attempting to reconnect to MongoDB...");
       mongoConnect();
-    }, 5000);  // Retry after 5 seconds
+    }, 5000);  
   });
 }
+
+
+
